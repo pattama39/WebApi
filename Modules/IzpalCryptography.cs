@@ -21,7 +21,7 @@ namespace WebApi.Modules
 
         public static string DecrypString(string str, string Key)
         {
-            DESCryptoServiceProvider provider = new DESCryptoServiceProvider();
+            AesCryptoServiceProvider provider = new AesCryptoServiceProvider();
             byte[] bytes = Encoding.UTF8.GetBytes(Key);
             provider.Key = ResizeBytesArray(bytes, provider.Key.Length);
             provider.IV = ResizeBytesArray(bytes, provider.IV.Length);
@@ -33,15 +33,12 @@ namespace WebApi.Modules
 
             reader.Close();
             reader.Dispose();
-            reader = null;
 
             stream.Close();
             stream.Dispose();
-            stream = null;
 
             stream2.Close();
             stream2.Dispose();
-            stream2 = null;
 
             return str3;
         }

@@ -110,5 +110,18 @@ namespace WebApi.Controllers
 
             return lstHospital;
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Mhospital>> GetHospital(string id)
+        {
+            var hospital = await _centraldb.Mhospitals.FindAsync(id);
+
+            if (hospital == null)
+            {
+                return NotFound();
+            }
+
+            return hospital;
+        }
     }
 }
