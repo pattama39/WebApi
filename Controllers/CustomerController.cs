@@ -6,6 +6,7 @@ using WebApi.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using WebApi.Modules;
 
 namespace WebApi.Controllers
 {
@@ -61,16 +62,18 @@ namespace WebApi.Controllers
         [HttpPost("{hospitalCode}")]
         public ActionResult Create(string hospitalCode, Mcustomer cus)
         {
-            var databaseId = (
+            var objhospital = (
                 from obj in _centraldb.Mhospitals 
-                where obj.HospitalCode == hospitalCode 
-                select obj.DatabaseId
+                where obj.HospitalCode == hospitalCode
+                select new { 
+                    obj.HospitalCode, 
+                    obj.DatabaseId 
+                }
             ).FirstOrDefault();
+            
+            izdbDataModelSyncContext currentdb = DbContextFactory.CreateClinic(objhospital.DatabaseId, _centraldb);
+            SaveAllData.SaveData(cus, (short)ProgramMode.NewMode, currentdb, objhospital.HospitalCode);
 
-            izdbDataModelSyncContext currentdb = DbContextFactory.CreateClinic(databaseId, _centraldb);
-
-            currentdb.Mcustomers.Add(cus);
-            currentdb.SaveChanges();
             return Ok(cus.CustomerCode);
         }
     }

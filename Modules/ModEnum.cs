@@ -23,4 +23,10 @@ namespace WebApi.Modules
             Other = 99
         }
     }
+
+    public enum ProgramMode
+    {
+        NewMode = 1,
+        EditMode = 2
+    }
 }
